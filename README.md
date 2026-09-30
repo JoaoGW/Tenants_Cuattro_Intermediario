@@ -39,6 +39,8 @@ cd functions && npm run seed
 cd web && npm run dev
 ```
 
+Os usuários de teste criados pelo seed estão em [`docs/usuarios-teste.md`](docs/usuarios-teste.md).
+
 O front-end abre em `http://localhost:5173` e já está configurado para conversar com os emuladores locais (nenhuma credencial de nuvem é necessária).
 
 Para rodar os testes automatizados das functions:
