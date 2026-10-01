@@ -29,13 +29,16 @@ Pré-requisitos: Node.js 20+, e a CLI do Firebase (`npm install -g firebase-tool
 cd functions && npm install && cd ..
 cd web && npm install && cd ..
 
-# 2. Rodar os emuladores (Firestore + Functions), a partir da raiz do repositório
+# 2. Compilar as functions (o emulador de Functions carrega o código de functions/lib)
+cd functions && npm run build && cd ..
+
+# 3. Rodar os emuladores (Auth + Firestore + Functions), a partir da raiz do repositório
 firebase emulators:start
 
-# 3. Em outro terminal, popular o banco com dados fictícios
+# 4. Em outro terminal, popular o banco com dados fictícios
 cd functions && npm run seed
 
-# 4. Em outro terminal, rodar o front-end
+# 5. Em outro terminal, rodar o front-end
 cd web && npm run dev
 ```
 
@@ -43,11 +46,14 @@ Os usuários de teste criados pelo seed estão em [`docs/usuarios-teste.md`](doc
 
 O front-end abre em `http://localhost:5173` e já está configurado para conversar com os emuladores locais (nenhuma credencial de nuvem é necessária).
 
-Para rodar os testes automatizados das functions:
+Para rodar os testes automatizados das functions (com os emuladores subindo e descendo sozinhos), a partir da raiz do repositório:
 
 ```bash
-cd functions && npm test
+cd functions && npm run build && cd ..
+firebase emulators:exec --only auth,firestore,functions "npm --prefix functions test"
 ```
+
+Atenção: os testes apagam todos os dados dos emuladores. Depois de rodá-los, execute `npm run seed` de novo para usar o front-end.
 
 ## Como entregar
 
