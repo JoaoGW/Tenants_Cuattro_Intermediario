@@ -10,7 +10,7 @@ export const ping = onCall(() => {
 
 /**
   * Retorna o tenantId do usuário autenticado, lido do token (custom claim).
-  * Usado por listAtendimentos e createAtendimento.
+ * Usado por listAtendimentos, createAtendimento e resumoPorTenant.
   *
   * @remarks Nunca usa o payload da chamada: o tenant sempre vem do token.
   *
@@ -70,4 +70,26 @@ export const createAtendimento = onCall(async (request) => {
   });
 
   return { id: doc.id };
+});
+
+/**
+ * Retorna a quantidade de atendimentos por status para o tenant autenticado.
+ */
+export const resumoPorTenant = onCall(async (request) => {
+  const tenantId = getTenantIdFromAuth(request);
+
+  // Consulta base dos atendimentos pertencentes ao tenant autenticado.
+  const atendimentosDoTenant = db.collection("atendimentos").where("tenantId", "==", tenantId);
+
+  const [novo, pendente, resolvido] = await Promise.all([
+    atendimentosDoTenant.where("status", "==", "novo").count().get(),
+    atendimentosDoTenant.where("status", "==", "pendente").count().get(),
+    atendimentosDoTenant.where("status", "==", "resolvido").count().get(),
+  ]);
+
+  return {
+    novo: novo.data().count,
+    pendente: pendente.data().count,
+    resolvido: resolvido.data().count,
+  };
 });
