@@ -1,5 +1,8 @@
 # AtendeAI (projeto fictício para teste técnico)
 
+> [!IMPORTANTE PARA O RECRUTADOR / DEV / TECH LEAD QUE ESTIVER REVISANDO:]
+> As credenciais dos usuários de teste (e-mail, senha e `tenantId` de cada um) estão em [`docs/usuarios-teste.md`](docs/usuarios-teste.md). Elas só existem no emulador local do Firebase Auth e são criadas pelo `npm run seed`.
+
 Este repositório é um projeto **fictício**, criado apenas para o processo seletivo da Cuattro. Ele simula (em pequena escala) o tipo de produto que a Cuattro constrói de verdade: uma plataforma multi-tenant de análise de atendimentos com IA. Nenhum dado aqui é real.
 
 A stack é a mesma usada em produção na Cuattro:
