@@ -6,3 +6,5 @@ firebase-debug.log
 firestore-debug.log
 ui-debug.log
 *.local
+.claude
+*.local.md

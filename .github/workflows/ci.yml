@@ -15,9 +15,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      # O emulador do Firestore roda em Java
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
       - run: npm install
       - run: npm run build
-      - run: npm test
+      # Os testes precisam dos emuladores de Auth, Firestore e Functions rodando; o emulators:exec sobe, roda os testes e derruba
+      - run: npx --yes firebase-tools@15.32.0 emulators:exec --only auth,firestore,functions --project atendeai-teste-local "npm --prefix functions test"
+        working-directory: .
 
   web:
     runs-on: ubuntu-latest

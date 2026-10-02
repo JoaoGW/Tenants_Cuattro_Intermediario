@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { db } from "./admin";
+import { auth, db } from "./admin";
+import { usuariosTeste } from "./usuariosTeste";
 
 async function seed() {
   const tenants = [
@@ -39,7 +40,17 @@ async function seed() {
     await db.collection("atendimentos").add(atendimento);
   }
 
-  console.log(`Seed concluído: ${tenants.length} tenants, ${atendimentos.length} atendimentos.`);
+  for (const usuario of usuariosTeste) {
+    // UID fixo: se o usuário já existe só atualiza. Se não existe, o update falha e ele é criado
+    try {
+      await auth.updateUser(usuario.uid, { email: usuario.email, password: usuario.senha });
+    } catch {
+      await auth.createUser({ uid: usuario.uid, email: usuario.email, password: usuario.senha });
+    }
+    await auth.setCustomUserClaims(usuario.uid, { tenantId: usuario.tenantId });
+  }
+
+  console.log(`Seed concluído: ${tenants.length} tenants, ${atendimentos.length} atendimentos, ${usuariosTeste.length} usuários.`);
   process.exit(0);
 }
 
